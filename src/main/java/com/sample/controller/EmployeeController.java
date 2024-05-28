@@ -1,9 +1,5 @@
 package com.sample.controller;
-
-
-
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sample.Exception.DataIsNull;
 import com.sample.model.Employee;
 import com.sample.service.EmployeeService;
 
@@ -34,7 +31,7 @@ public class EmployeeController {
     }
     
     @PostMapping
-    public Employee saveemployee(@RequestBody Employee employee){
+    public Employee saveemployee(@RequestBody Employee employee)throws DataIsNull{
         logger.info("The user is created",employee);
         return employeeservice.savemployee(employee);
     }
@@ -46,7 +43,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public Employee getEmployee(@PathVariable("id") int id){
+    public Employee getEmployeeById(@PathVariable("id") int id){
         logger.info("get information of the  empoyees by id",id);
          return employeeservice.getEmployee(id);
     }
@@ -64,6 +61,4 @@ public class EmployeeController {
         return "data deleted succesfully";
     }
 
-   
-    
 }

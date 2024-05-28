@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.sample.dao.EmployeeDao;
 import com.sample.model.Employee;
+import com.sample.Exception.DataIsNull;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
@@ -15,7 +16,10 @@ public class EmployeeServiceImpl implements EmployeeService{
     EmployeeDao employeedao;
 
     @Override
-    public Employee savemployee(Employee employee){
+    public Employee savemployee(Employee employee) throws DataIsNull {
+        if(employee== null){
+            throw new DataIsNull("data is null");
+        }
            return employeedao.savemployee(employee);
     }
 
@@ -26,6 +30,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public Employee getEmployee(int id){
+       
         return employeedao.getEmployee(id);
     }
 

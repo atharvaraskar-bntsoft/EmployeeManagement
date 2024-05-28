@@ -1,6 +1,8 @@
 package com.sample.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
@@ -10,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.sample.controller.EmployeeController;
+
 import com.sample.dao.EmployeeDao;
 import com.sample.model.Employee;
 import com.sample.service.EmployeeServiceImpl;
@@ -23,7 +25,7 @@ public class EmployeeControlllerTest {
 
 
     @Mock
-     EmployeeDao employeedao;
+    EmployeeDao employeedao;
      
     @Mock
     EmployeeServiceImpl employeeServiceImpl ;
@@ -40,7 +42,7 @@ public class EmployeeControlllerTest {
     }
 
     @Test
-    void saveemployeetest(){
+    void saveEmployeetest(){
 
         Employee expected=new Employee(1,"atharva",20000);
        when(employeeServiceImpl.savemployee(expected)).thenReturn(expected);
@@ -53,17 +55,52 @@ public class EmployeeControlllerTest {
 
      @Test
     void getAllEmployees(){
-            List<Employee> expectedlist =  new ArrayList<>();
-            expectedlist.add(new Employee(1,"atharva",20000));
-            expectedlist.add(new Employee(2,"ram",40000));
-
-            when(employeeServiceImpl.getallEmployees()).thenReturn(expectedlist);
-
-          //  List<Employee> actuallList=employeeControlller.saveemployee(expectedlist);
-         //  assertEquals(expectedlist, actuallList);
-
-
+       
+         List<Employee> expectedlist = new ArrayList<>();
+         expectedlist.add(new Employee(1, "atharva", 20000));
+         expectedlist.add(new Employee(2, "ram", 40000));
+     
+         // Mocking the behavior of the service method
+         when(employeeServiceImpl.getallEmployees()).thenReturn(expectedlist);
+     
+         // Calling the controller method under test
+         List<Employee> actualList = employeeControlller.getAllEmployees();
+     
+         // Asserting that the expected and actual lists are equal
+         assertEquals(expectedlist, actualList);
 
     }
+
+    @Test
+    void getEmployeeById(){
+        
+        Employee expected=new Employee(1,"atharva",200000);
+        
+        when(employeeServiceImpl.getEmployee(1)).thenReturn(expected);
+        Employee actual=employeeControlller.getEmployee(1);
+        
+        assertEquals(expected, actual);
+    }
     
+    @Test
+    void updatEmployee(){
+
+        Employee expected=new Employee(1,"atharva",200000);
+
+        when(employeeServiceImpl.updatEmployee(expected)).thenReturn(expected);
+        Employee actual=employeeControlller.updatEmployee(expected);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void deleteEmployee(){
+           
+        int id=2;
+        employeeControlller.deleteEmployee(id);
+        verify(employeeServiceImpl, times(1)).deleteEmployee(id);      
+    }
+
+
+
 }
