@@ -12,7 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
+import com.sample.Exception.DataIsNull;
 import com.sample.dao.EmployeeDao;
 import com.sample.model.Employee;
 import java.util.*;
@@ -30,7 +30,7 @@ import java.util.*;
 
 
        @Test
-        void saveemployeetest(){
+        void saveemployeetest() throws DataIsNull{
              Employee expected= new Employee(1,"atharava",20000);
 
               when(employeeDao.savemployee(expected)).thenReturn(expected);

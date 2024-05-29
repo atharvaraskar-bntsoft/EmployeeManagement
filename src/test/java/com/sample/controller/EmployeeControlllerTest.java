@@ -42,7 +42,7 @@ public class EmployeeControlllerTest {
     }
 
     @Test
-    void saveEmployeetest(){
+    void saveEmployeetest() throws Exception{
 
         Employee expected=new Employee(1,"atharva",20000);
        when(employeeServiceImpl.savemployee(expected)).thenReturn(expected);
@@ -77,7 +77,7 @@ public class EmployeeControlllerTest {
         Employee expected=new Employee(1,"atharva",200000);
         
         when(employeeServiceImpl.getEmployee(1)).thenReturn(expected);
-        Employee actual=employeeControlller.getEmployee(1);
+        Employee actual=employeeControlller.getEmployeeById(1);
         
         assertEquals(expected, actual);
     }

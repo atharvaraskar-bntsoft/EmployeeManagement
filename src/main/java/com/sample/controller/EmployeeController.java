@@ -3,6 +3,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sample.Exception.DataIsNull;
+import com.sample.Exception.UserNotFound;
 import com.sample.model.Employee;
 import com.sample.service.EmployeeService;
 
@@ -31,9 +34,15 @@ public class EmployeeController {
     }
     
     @PostMapping
-    public Employee saveemployee(@RequestBody Employee employee)throws DataIsNull{
+    public  ResponseEntity<Object>  saveemployee(@RequestBody Employee employee)throws DataIsNull{
         logger.info("The user is created",employee);
-        return employeeservice.savemployee(employee);
+
+        Employee emp= employeeservice.savemployee(employee);
+        
+        if (emp== null) {
+            return new ResponseEntity<Object>("Data is null fill all the data", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<Object>(emp, HttpStatus.OK);
     }
 
     @GetMapping
@@ -55,7 +64,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public  String deleteEmployee(@PathVariable("id") int id){
+    public  String deleteEmployee(@PathVariable("id") int id)throws UserNotFound{
         logger.info("delete  the  empoyee details ",id);
         employeeservice.deleteEmployee(id);
         return "data deleted succesfully";

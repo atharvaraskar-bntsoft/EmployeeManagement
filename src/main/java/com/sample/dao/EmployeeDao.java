@@ -126,7 +126,20 @@ public class EmployeeDao {
     }
 
 
-
+    public List<Integer> getId() {
+        List<Integer> list = new ArrayList<>();
+        try (
+            Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT id FROM empdata");
+                ResultSet rs = statement.executeQuery()) {
+            while (rs.next()) {
+                list.add(rs.getInt(1));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
     
 }
