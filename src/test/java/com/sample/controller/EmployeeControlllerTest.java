@@ -1,8 +1,7 @@
 package com.sample.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
@@ -11,11 +10,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-
+import org.springframework.http.ResponseEntity;
 
 import com.sample.dao.EmployeeDao;
 import com.sample.model.Employee;
 import com.sample.service.EmployeeServiceImpl;
+import static org.springframework.http.HttpStatus.*;
 
 import java.util.*;
 
@@ -42,14 +42,14 @@ public class EmployeeControlllerTest {
     }
 
     @Test
-    void saveEmployeetest() throws Exception{
+    void saveEmployeetest() {
 
         Employee expected=new Employee(1,"atharva",20000);
-       when(employeeServiceImpl.savemployee(expected)).thenReturn(expected);
+       when(employeeServiceImpl.saveEmployee(expected)).thenReturn(expected);
 
-       Employee actual=employeeControlller.saveemployee(expected);
-       assertEquals(expected, actual);
-
+       ResponseEntity<Object> actualresultResponseEntity=employeeControlller.saveEmployee(expected);
+       assertEquals(CREATED, actualresultResponseEntity.getStatusCode());
+       assertEquals(expected, actualresultResponseEntity.getBody());
 
     }
 
@@ -73,14 +73,17 @@ public class EmployeeControlllerTest {
 
     @Test
     void getEmployeeById(){
-        
         Employee expected=new Employee(1,"atharva",200000);
-        
         when(employeeServiceImpl.getEmployee(1)).thenReturn(expected);
-        Employee actual=employeeControlller.getEmployeeById(1);
-        
-        assertEquals(expected, actual);
+
+        ResponseEntity<Object> actualresultResponseEntity=employeeControlller.getEmployeeById(1);
+        assertEquals(OK, actualresultResponseEntity.getStatusCode());
+        assertEquals(expected, actualresultResponseEntity.getBody());
+
     }
+
+
+
     
     @Test
     void updatEmployee(){
@@ -88,17 +91,24 @@ public class EmployeeControlllerTest {
         Employee expected=new Employee(1,"atharva",200000);
 
         when(employeeServiceImpl.updatEmployee(expected)).thenReturn(expected);
-        Employee actual=employeeControlller.updatEmployee(expected);
-
-        assertEquals(expected, actual);
+        
+        ResponseEntity<Object> actualresultResponseEntity=employeeControlller.updatEmployee(expected);
+        assertEquals(OK, actualresultResponseEntity.getStatusCode());
+        assertEquals(expected, actualresultResponseEntity.getBody());
     }
 
     @Test
     void deleteEmployee(){
            
-        int id=2;
-        employeeControlller.deleteEmployee(id);
-        verify(employeeServiceImpl, times(1)).deleteEmployee(id);      
+        boolean expected=true; 
+        when(employeeServiceImpl.deleteEmployee(1)).thenReturn(expected);
+
+        ResponseEntity<Object> actualresultResponseEntity=employeeControlller.deleteEmployee(1);
+        assertEquals(OK, actualresultResponseEntity.getStatusCode());
+        assertEquals("Data deleted succefully ", actualresultResponseEntity.getBody() );
+
+        
+        
     }
 
 

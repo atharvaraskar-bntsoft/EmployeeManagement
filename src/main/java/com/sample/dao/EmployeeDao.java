@@ -24,7 +24,7 @@ public class EmployeeDao {
     
 
 
-    public Employee savemployee(Employee employees){
+    public Employee saveEmployee(Employee employees){
          
         try{
              
@@ -118,7 +118,7 @@ public class EmployeeDao {
             PreparedStatement ps=con.prepareStatement("delete from empdata where id=?");
             ps.setInt(1,id);
     
-            ps.executeQuery();
+            ps.executeUpdate();
             
         } catch (SQLException e) {
             e.printStackTrace();
@@ -126,18 +126,19 @@ public class EmployeeDao {
     }
 
 
-    public List<Integer> getId() {
+    public List<Integer>GetListOfAllId(){
         List<Integer> list = new ArrayList<>();
         try (
             Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement("SELECT id FROM empdata");
-                ResultSet rs = statement.executeQuery()) {
+                ResultSet rs = statement.executeQuery()){
             while (rs.next()) {
                 list.add(rs.getInt(1));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
         return list;
     }
 

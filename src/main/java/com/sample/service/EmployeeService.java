@@ -2,13 +2,13 @@ package com.sample.service;
 
 import java.util.List;
 
-import com.sample.Exception.DataIsNull;
-import com.sample.Exception.UserNotFound;
+
+
 import com.sample.model.Employee;
 
 public interface EmployeeService {
     
-     public Employee savemployee(Employee employee) throws DataIsNull;
+     public Employee saveEmployee(Employee employee) ;
 
      public Employee getEmployee(int id);
 
@@ -16,6 +16,6 @@ public interface EmployeeService {
   
      public Employee updatEmployee(Employee employee);
 
-     public void deleteEmployee(int id) throws UserNotFound;
+     public boolean deleteEmployee(int id) ;
 
   } 

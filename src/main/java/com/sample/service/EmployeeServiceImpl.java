@@ -22,19 +22,20 @@ public class EmployeeServiceImpl implements EmployeeService{
     Logger logger=LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
     @Override
-    public Employee savemployee(Employee employee) throws DataIsNull {
+    public Employee saveEmployee(Employee employee)  {
+        Employee employee2=null;
         try {
-            if( employee.getName() == null || employee.getId()== 0 || employee.getSalary()==0){
+            if( employee.getName() == null || employee.getId()== 0 || employee.getSalary()==0
+                     || employeedao.GetListOfAllId().contains(employee.getId() )   ){                               
                 throw new DataIsNull("data is null fill all the data");
              }
-             else{
-                return employeedao.savemployee(employee);
-             }
+                employee2=employeedao.saveEmployee(employee);
+                return employee2;
             
         } catch (Exception e) {
-            logger.info("excption is:"+e);
+            logger.error("excption is:"+e);
         }    
-           return null;
+           return employee2;
     }
 
     
@@ -47,30 +48,64 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public Employee getEmployee(int id){
+        Employee employee2=null;
+        try{
+            if(!employeedao.GetListOfAllId().contains(id)){ 
+        
+                 throw new UserNotFound("USER NOT FOUND");
+            }
+            else{
+                employee2= employeedao.getEmployee(id);
+                return employee2;
+            }
+                 }
+         catch(Exception e){
+                logger.error("excption is:"+e);
+                return  employee2; 
+              }
        
-        return employeedao.getEmployee(id);
+
     }
 
     @Override
     public Employee updatEmployee(Employee employee){
-        //employee.setId(id);
-        return employeedao.updatEmployee(employee);
+        Employee employee2=null;
+        try{
+            if(!employeedao.GetListOfAllId().contains(employee.getId() )){ 
+        
+                 throw new UserNotFound("USER NOT FOUND");
+            }
+            else{
+                employee2= employeedao.updatEmployee(employee);
+                return employee2;
+            }
+                 }
+         catch(Exception e){
+                logger.error("excption is:"+e);
+                return  employee2; 
+              }
+       
     }
      
+
     @Override
-    public void deleteEmployee(int id) throws UserNotFound{
+    public boolean deleteEmployee(int id) {
+    
      try{
-        if(!employeedao.getId().contains(id)){
-            throw new UserNotFound("USER NOT FOUND");
+        if(!employeedao.GetListOfAllId().contains(id)){ 
+    
+             throw new UserNotFound("USER NOT FOUND");
         }
         else{
             employeedao.deleteEmployee(id);
+            return true;
         }
              }
      catch(Exception e){
-            logger.info("excption is:"+e);
+            logger.error("excption is:"+e);
+            return false; 
           }
-         
+     //   return false;      
     }
     
 }

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sample.Exception.DataIsNull;
-import com.sample.Exception.UserNotFound;
+
+
 import com.sample.model.Employee;
 import com.sample.service.EmployeeService;
 
@@ -34,40 +35,60 @@ public class EmployeeController {
     }
     
     @PostMapping
-    public  ResponseEntity<Object>  saveemployee(@RequestBody Employee employee)throws DataIsNull{
-        logger.info("The user is created",employee);
-
-        Employee emp= employeeservice.savemployee(employee);
+    public  ResponseEntity<Object> saveEmployee(@RequestBody Employee employee){
+       
+        Employee emp= employeeservice.saveEmployee(employee);
         
         if (emp== null) {
-            return new ResponseEntity<Object>("Data is null fill all the data", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Object>("Data is null fill all the data", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<Object>(emp, HttpStatus.OK);
+            logger.info("The user is created",emp);
+            return new ResponseEntity<Object>(emp, HttpStatus.CREATED);
+       
     }
 
     @GetMapping
     public List<Employee> getAllEmployees(){
-        logger.info("get information of the all empoyees");
+        logger.info("get information of the all employees");
          return employeeservice.getallEmployees();
     }
 
     @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable("id") int id){
-        logger.info("get information of the  empoyees by id",id);
-         return employeeservice.getEmployee(id);
+    public ResponseEntity<Object> getEmployeeById(@PathVariable("id") int id){
+        
+        Employee employee2=employeeservice.getEmployee(id);
+         if (employee2== null) {
+            return  new ResponseEntity<Object>("USER NOT FOUND ",HttpStatus.NOT_FOUND);
+           }
+           logger.info("get information of the  employees by id",id);
+           return  new ResponseEntity<Object>(employee2,HttpStatus.OK);
     }
 
     @PutMapping
-    public Employee updatEmployee(@RequestBody Employee employee){
-           logger.info("update information of the  empoyee ",employee);
-           return employeeservice.updatEmployee(employee);
+    public ResponseEntity<Object> updatEmployee(@RequestBody Employee employee){
+           
+           
+           Employee employee2=employeeservice.updatEmployee(employee);
+           if (employee2== null) {
+            return  new ResponseEntity<Object>("USER NOT FOUND ",HttpStatus.NOT_FOUND);
+           }
+           logger.info("update information of the  employee ",employee);
+           return  new ResponseEntity<Object>(employee,HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public  String deleteEmployee(@PathVariable("id") int id)throws UserNotFound{
-        logger.info("delete  the  empoyee details ",id);
-        employeeservice.deleteEmployee(id);
-        return "data deleted succesfully";
+    public  ResponseEntity<Object> deleteEmployee(@PathVariable("id") int id){
+        
+
+        boolean result=employeeservice.deleteEmployee(id);
+         
+        if(result== true){ 
+              logger.info("employe deleted suucefully ",id);
+              return new ResponseEntity<Object>("Data deleted succefully ",HttpStatus.OK);
+        }
+        else{
+              return new ResponseEntity<Object>("USER NOT FOUND ",HttpStatus.NOT_FOUND);
+        } 
     }
 
 }

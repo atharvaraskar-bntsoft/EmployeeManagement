@@ -28,9 +28,9 @@ public class EmployeeDaoTest {
     void saveemployee(){
         Employee expected=new Employee(1,"atharva",20000);
         
-        when(employeeDao.savemployee(expected)).thenReturn(expected);
+        when(employeeDao.saveEmployee(expected)).thenReturn(expected);
 
-        Employee actual=employeeDao.savemployee(expected);
+        Employee actual=employeeDao.saveEmployee(expected);
         assertEquals(expected, actual);
 
     }

@@ -33,9 +33,9 @@ import java.util.*;
         void saveemployeetest() throws DataIsNull{
              Employee expected= new Employee(1,"atharava",20000);
 
-              when(employeeDao.savemployee(expected)).thenReturn(expected);
+              when(employeeDao.saveEmployee(expected)).thenReturn(expected);
 
-              Employee actual = employeeServiceImpl.savemployee(expected);
+              Employee actual = employeeServiceImpl.saveEmployee(expected);
               assertEquals(expected, actual);
 
         }
