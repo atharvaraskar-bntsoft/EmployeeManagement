@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.sample.dao.EmployeeDao;
 import com.sample.model.Employee;
 import com.sample.Exception.DataIsNull;
+import com.sample.Exception.DuplicateData;
 import com.sample.Exception.UserNotFound;
 
 
@@ -25,15 +26,17 @@ public class EmployeeServiceImpl implements EmployeeService{
     public Employee saveEmployee(Employee employee)  {
         Employee employee2=null;
         try {
-            if( employee.getName() == null || employee.getId()== 0 || employee.getSalary()==0
-                     || employeedao.GetListOfAllId().contains(employee.getId() )   ){                               
-                throw new DataIsNull("data is null fill all the data");
+            if( employee.getName() == null || employee.getId()== 0 || employee.getSalary()==0 )   {                                  
+                throw new DataIsNull("Data is null fill all the data");
+             }
+             if(employeedao.GetListOfAllId().contains(employee.getId() )){
+                throw new DuplicateData("Duplicate data detected: ID already exists");
              }
                 employee2=employeedao.saveEmployee(employee);
                 return employee2;
             
         } catch (Exception e) {
-            logger.error("excption is:"+e);
+            logger.error("Excption is:"+e);
         }    
            return employee2;
     }

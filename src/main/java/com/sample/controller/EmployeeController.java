@@ -40,7 +40,7 @@ public class EmployeeController {
         Employee emp= employeeservice.saveEmployee(employee);
         
         if (emp== null) {
-            return new ResponseEntity<Object>("Data is null fill all the data", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Object>("Invalid Data: Null or Duplicate entries detected. Verify input.", HttpStatus.BAD_REQUEST);
         }
             logger.info("The user is created",emp);
             return new ResponseEntity<Object>(emp, HttpStatus.CREATED);
@@ -66,8 +66,7 @@ public class EmployeeController {
 
     @PutMapping
     public ResponseEntity<Object> updatEmployee(@RequestBody Employee employee){
-           
-           
+                 
            Employee employee2=employeeservice.updatEmployee(employee);
            if (employee2== null) {
             return  new ResponseEntity<Object>("USER NOT FOUND ",HttpStatus.NOT_FOUND);
